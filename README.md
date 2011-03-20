@@ -47,6 +47,7 @@ trivial (i.e., a getter), you are probably not going to notice the overhead.
 Obviously, don't use dynamic methods in a tight loop.
 
 Here are the worst case scenario where the method is a simple getter:
+
 -   class methods: 1.1 microsecs
 -   dynamic method: 4.0 microsecs
 -   dynamic pattern-matching method: 7.3 microsecs
