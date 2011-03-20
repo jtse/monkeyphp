@@ -1,8 +1,9 @@
 monkeyphp
 =========
 
-PHP 5.3 class that adds basic monkey patch support, specifically dynamic 
-methods and dynamic pattern-matching methods.
+A PHP class that adds basic monkey patch support, specifically adding 
+methods and pattern-matching methods dynamically. Because of the use of lamdas, 
+monkeyphp requires PHP 5.3 or higher
 
 Usage
 -----
@@ -27,7 +28,7 @@ Adding a simple method to an instance
     echo $object->init; // now true
     
 
-Add a regex pattern matching method
+Adding a regex pattern matching method
 
     
     $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
@@ -40,18 +41,25 @@ Add a regex pattern matching method
 
 Performance
 -----------
-Dynamic methods is slightly slower than hardwired class methods because of the 
-overhead of PHP's __call. Chances are that your methods are performing 
-non-trivial operations so you won't notice the overhead. But obviously, don't 
-use dynamic methods in a tight loop.
+Dynamic methods are slightly slower than hardwired class methods because of the 
+overhead of PHP's __call() function. Unless the dynamic method is extremely 
+trivial (i.e., a getter), you are probably not going to notice the overhead. 
+Obviously, don't use dynamic methods in a tight loop.
 
-Worst case scenario where the method is a simple getter, dynamic methods 
-takes 4 microsecs to execute while hardwired class methods take 1.1 
-microsecs (as tested on an Intel 2.4 Ghz Core 2 Duo). The same dynamic regex 
-method takes about 7 microsecs to execute.
+Here are the worst case scenario where the method is a simple getter:
+- class methods: 1.1 microsecs
+- dynamic method: 4.0 microsecs
+- dynamic pattern-matching method: 7.3 microsecs
 
-See the benchmarks in test/MonkeyTest.php
+Benchmarks were run on an Intel 2.4 Ghz Core 2 Duo MacBook Pro (2010). For details, 
+see the benchmarks in test/MonkeyTest.php
 
+
+Test
+----
+    
+    phpunit tests/
+    
 
 License
 -------

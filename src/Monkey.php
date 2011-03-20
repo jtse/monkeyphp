@@ -19,15 +19,20 @@
  *
  */
 class Monkey {
+	private static $_CLASS_METHODS;
+	private static $_CLASS_REGEX_METHODS;
+
 	private $_methods = array();
 	private $_regexMethods = array();
 
 	function __call($name, $arguments) {
+		// Is instance method?
 		if (isset($this->_methods[$name])) {
 			$arguments[] = $this;
 			return call_user_func_array($this->_methods[$name], $arguments);
 		}
 
+		// Is instance pattern matching method
 		foreach($this->_regexMethods as $pattern => $function) {
 			$_matches = array();
 			if (preg_match($pattern, $name, $_matches)) {
@@ -47,7 +52,12 @@ class Monkey {
 			}
 		}
 
-		parent::__call($name, $arguments);
+		// Is class method?
+		$class = get_class($this);
+		if (isset(self::$_CLASS_METHODS[$class][$name])) {
+			$arguments[] = $this;
+			return call_user_func_array(self::$_CLASS_METHODS[$class][$name], $arguments);
+		}
 	}
 
 	/**
@@ -63,6 +73,23 @@ class Monkey {
 		} else {
 			$this->_methods[$nameOrRegex] = $callback;
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Adds a method to all instances of the class.
+	 *
+	 * Note that this cannot be a static method call because the class will
+	 * always refer to this class
+	 * @param string $nameOrRegex
+	 * @param function $callback
+	 * @return Monkey (useful for fluent syntax)
+	 */
+	function addClassMethod($nameOrRegex, $callback) {
+		$class = get_class($this);
+
+		self::$_CLASS_METHODS[$class][$nameOrRegex] = $callback;
 
 		return $this;
 	}

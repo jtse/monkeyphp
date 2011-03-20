@@ -59,6 +59,42 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
+	 */
+	function addClassMethodPassesThis() {
+		$m = new Monkey5;
+
+		$m->addClassMethod("getThis", function($_this) {
+			return $_this;
+		});
+
+		$expected = new Monkey5;
+		$actual = $expected->getThis();
+
+		self::assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @test
+	 */
+	function addClassMethodToOneClassDoesNotAddToAnotherClass() {
+		$m = new Monkey5;
+		$m->addClassMethod("getMe", function() {
+			return 1;
+		});
+
+		$n = new Monkey4;
+		$n->addClassMethod("getMe", function() {
+			return 2;
+		});
+
+		$i = new Monkey5;
+		$j = new Monkey4;
+		self::assertEquals(1, $i->getMe());
+		self::assertEquals(2, $j->getMe());
+	}
+
+	/**
+	 * @test
 	 * @group benchmark
 	 */
 	function benchmarkMonkeyPatchedMethodVersusDirectCall() {
@@ -137,8 +173,11 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 		self::times($n, $callback2);
 		$delta2 = microtime(true) - $time;
 		echo "\n";
-		echo "'$name1' @ $n times: " . round(($n / $delta1 * 0.001), 2) . "/msec\n";
-		echo "'$name2' @ $n times: " . round(($n / $delta2 * 0.001), 2) . "/msec\n";
+		echo "'$name1' @ $n times: " . round(($n / $delta1 * 0.001), 2)
+			. "/msec (or 1 call in " . round($delta1 / $n * 1000000, 2) . " microsec)\n";
+		echo "'$name2' @ $n times: " . round(($n / $delta2 * 0.001), 2)
+			. "/msec (or 1 call in " . round($delta2 / $n * 1000000, 2) . " microsec)\n";
+
 		echo "'$name1' is " . round($delta2/$delta1, 2) . " times faster than '$name2'\n";
 	}
 
@@ -162,4 +201,7 @@ class Monkey4 extends Monkey3 {
 }
 
 class Monkey5 extends Monkey4 {
+}
+
+class MissingMethodException extends Exception {
 }
