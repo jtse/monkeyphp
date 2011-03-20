@@ -1,13 +1,12 @@
 monkeyphp
 =========
 
-Class that adds basic monkey patch support for PHP 
-
-Requires PHP 5.3
+PHP 5.3 class that adds basic monkey patch support, specifically dynamic 
+methods and dynamic pattern-matching methods.
 
 Usage
 -----
-
+    
     class MyClass extends Monkey {
       public $init = false;
     };
@@ -32,6 +31,7 @@ Usage
     
     $object->findByUsername(); // echos 'Username';
     $object->findByEmail(); // echos 'Email';
+    
 
 Performance
 -----------
@@ -44,3 +44,10 @@ Worst case scenario where the method is a simple getter, dynamic methods
 takes 4 microsecs to execute while hardwired class methods take 1.1 
 microsecs (as tested on an Intel 2.4 Ghz Core 2 Duo). The same dynamic regex 
 method takes about 7 microsecs to execute.
+
+See the benchmarks in test/MonkeyTest.php
+
+
+License
+-------
+Apache License 2.0
