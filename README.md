@@ -8,31 +8,30 @@ Requires PHP 5.3
 Usage
 -----
 
-class MyClass extends Monkey {
-  public $init = false;
-};
-
-$object = new MyClass;
-
-// Add a method dynamically
-$object->addMethod('init', function($arg1, $arg2, $_this) {
-  // do stuff with $arg1 and $arg2
-  ...
-  $_this->init = true;  // Anonymous functions in PHP 5.3 do not capture $this
-                        // so we must pass in $_this as an argument
-});
-
-$object->init("testa", testb");
-echo $object->init; // now true
-
-// Add a regex-matching method dynamically
-$object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
-  echo $_matches[0];
-});
-
-$object->findByUsername(); // echos 'Username';
-$object->findByEmail(); // echos 'Email';
-
+    class MyClass extends Monkey {
+      public $init = false;
+    };
+    
+    $object = new MyClass;
+    
+    // Add a method dynamically
+    $object->addMethod('init', function($arg1, $arg2, $_this) {
+      // do stuff with $arg1 and $arg2
+      ...
+      $_this->init = true;  // Anonymous functions in PHP 5.3 do not capture $this
+                            // so we must pass in $_this as an argument
+    });
+    
+    $object->init("testa", testb");
+    echo $object->init; // now true
+    
+    // Add a regex-matching method dynamically
+    $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
+      echo $_matches[0];
+    });
+    
+    $object->findByUsername(); // echos 'Username';
+    $object->findByEmail(); // echos 'Email';
 
 Performance
 -----------
