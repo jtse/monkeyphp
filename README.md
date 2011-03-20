@@ -48,9 +48,9 @@ Obviously, don't use dynamic methods in a tight loop.
 
 Here are the worst case scenario where the method is a simple getter:
 
--   class methods: 1.1 microsecs
--   dynamic method: 4.0 microsecs
--   dynamic pattern-matching method: 7.3 microsecs
+- class method: 1.1 microsecs
+- dynamic method: 4.0 microsecs
+- dynamic pattern-matching method: 7.3 microsecs
 
 Benchmarks were run on an Intel 2.4 Ghz Core 2 Duo MacBook Pro (2010). For details, 
 see the benchmarks in test/MonkeyTest.php
