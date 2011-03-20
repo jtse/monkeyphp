@@ -1,5 +1,5 @@
-monkeyphp
-=========
+monkey-php - adding methods to objects and classes dynamically in php
+=====================================================================
 A PHP class that adds basic monkey patch support, specifically adding 
 methods and pattern-matching methods dynamically. Because of the use of lamdas, 
 monkeyphp requires PHP 5.3 or higher. The class is small enough that you can 
