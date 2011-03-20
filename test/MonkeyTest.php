@@ -95,6 +95,21 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
+	 */
+	function addRegexClassMethodToClass() {
+		$m = new Monkey2;
+		$m->addClassMethod("/findBy(\w+)/", function($_matches) {
+			return $_matches[0];
+		});
+
+		$i = new Monkey2;
+
+		self::assertEquals("Name", $i->findByName());
+		self::assertEquals("Email", $i->findByEmail());
+	}
+
+	/**
+	 * @test
 	 * @group benchmark
 	 */
 	function benchmarkMonkeyPatchedMethodVersusDirectCall() {

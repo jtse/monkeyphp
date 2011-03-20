@@ -19,8 +19,8 @@
  *
  */
 class Monkey {
-	private static $_CLASS_METHODS;
-	private static $_CLASS_REGEX_METHODS;
+	private static $_CLASS_METHODS = array();
+	private static $_CLASS_REGEX_METHODS = array();
 
 	private $_methods = array();
 	private $_regexMethods = array();
@@ -32,8 +32,22 @@ class Monkey {
 			return call_user_func_array($this->_methods[$name], $arguments);
 		}
 
-		// Is instance pattern matching method
-		foreach($this->_regexMethods as $pattern => $function) {
+		$class = get_class($this);
+		// Is class method?
+		if (isset(self::$_CLASS_METHODS[$class][$name])) {
+			$arguments[] = $this;
+			return call_user_func_array(self::$_CLASS_METHODS[$class][$name], $arguments);
+		}
+
+		// Is instance/class pattern matching method
+		$patterns = array_merge(
+			isset(self::$_CLASS_REGEX_METHODS[$class])
+				? self::$_CLASS_REGEX_METHODS[$class]
+				: array()
+			, $this->_regexMethods
+		);
+
+		foreach($patterns as $pattern => $function) {
 			$_matches = array();
 			if (preg_match($pattern, $name, $_matches)) {
 				array_shift($_matches);
@@ -51,13 +65,6 @@ class Monkey {
 				return call_user_func_array($this->_methods[$name], $arguments);
 			}
 		}
-
-		// Is class method?
-		$class = get_class($this);
-		if (isset(self::$_CLASS_METHODS[$class][$name])) {
-			$arguments[] = $this;
-			return call_user_func_array(self::$_CLASS_METHODS[$class][$name], $arguments);
-		}
 	}
 
 	/**
@@ -68,7 +75,7 @@ class Monkey {
 	 * @return Monkey (useful for fluent syntax)
 	 */
 	function addMethod($nameOrRegex, $callback) {
-		if (preg_match('/\/.*\//', $nameOrRegex)) {
+		if (self::is_regex($nameOrRegex)) {
 			$this->_regexMethods[$nameOrRegex] = $callback;
 		} else {
 			$this->_methods[$nameOrRegex] = $callback;
@@ -89,8 +96,15 @@ class Monkey {
 	function addClassMethod($nameOrRegex, $callback) {
 		$class = get_class($this);
 
-		self::$_CLASS_METHODS[$class][$nameOrRegex] = $callback;
-
+		if (self::is_regex($nameOrRegex)) {
+			self::$_CLASS_REGEX_METHODS[$class][$nameOrRegex] = $callback;
+		} else {
+			self::$_CLASS_METHODS[$class][$nameOrRegex] = $callback;
+		}
 		return $this;
+	}
+
+	static private function is_regex($string) {
+		return preg_match('/\/.*\//', $string);
 	}
 }

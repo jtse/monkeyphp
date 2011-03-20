@@ -1,14 +1,14 @@
 monkeyphp
 =========
-
 A PHP class that adds basic monkey patch support, specifically adding 
 methods and pattern-matching methods dynamically. Because of the use of lamdas, 
-monkeyphp requires PHP 5.3 or higher
+monkeyphp requires PHP 5.3 or higher. The class is small enough that you can 
+copy and paste it into the base class of your application.
+
 
 Usage
 -----
-
-Adding a simple method to an instance
+To add simple method to an object instance:
 
     
     class MyClass extends Monkey {
@@ -28,7 +28,7 @@ Adding a simple method to an instance
     echo $object->init; // now true
     
 
-Adding a regex pattern matching method
+To adding a regex patternmatching method:
 
     
     $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
@@ -58,6 +58,7 @@ see the benchmarks in test/MonkeyTest.php
 
 Test
 ----
+Run the following command:
     
     phpunit tests/
     
