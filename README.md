@@ -28,7 +28,7 @@ To add simple method to an object instance:
     echo $object->init; // now true
     
 
-To adding a regex patternmatching method:
+To add a regex pattern-matching method:
 
     
     $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
@@ -37,6 +37,12 @@ To adding a regex patternmatching method:
     
     $object->findByUsername(); // echos 'Username';
     $object->findByEmail(); // echos 'Email';
+    
+To add a simple method to the class:
+    
+    $object->addClassMethod("myClassMethod", function() {
+      echo 'this is a class method';
+    });
     
 
 Performance
