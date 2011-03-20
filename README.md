@@ -8,6 +8,7 @@ Usage
 -----
 
 1. Adding a simple method to an instance
+
     
     class MyClass extends Monkey {
       public $init = false;
@@ -25,7 +26,9 @@ Usage
     $object->init("testa", "testb");
     echo $object->init; // now true
     
+
 2. Add a regex pattern matching method
+
     
     $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
       echo $_matches[0];
