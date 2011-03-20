@@ -6,6 +6,8 @@ methods and dynamic pattern-matching methods.
 
 Usage
 -----
+
+1. Adding a simple method to an instance
     
     class MyClass extends Monkey {
       public $init = false;
@@ -13,7 +15,6 @@ Usage
     
     $object = new MyClass;
     
-    // Add a method dynamically
     $object->addMethod('init', function($arg1, $arg2, $_this) {
       // do stuff with $arg1 and $arg2
       ...
@@ -21,10 +22,11 @@ Usage
                             // so we must pass in $_this as an argument
     });
     
-    $object->init("testa", testb");
+    $object->init("testa", "testb");
     echo $object->init; // now true
     
-    // Add a regex-matching method dynamically
+2. Add a regex pattern matching method
+    
     $object->addMethod("/findBy(\w+)/", function($arg1, $arg2, $_matches, $_this) {
       echo $_matches[0];
     });
