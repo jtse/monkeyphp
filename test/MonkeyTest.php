@@ -61,9 +61,7 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 	 * @test
 	 */
 	function addClassMethodPassesThis() {
-		$m = new Monkey5;
-
-		$m->addClassMethod("getThis", function($_this) {
+		Monkey::add_method('Monkey5', "getThis", function($_this) {
 			return $_this;
 		});
 
@@ -77,13 +75,11 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 	 * @test
 	 */
 	function addClassMethodToOneClassDoesNotAddToAnotherClass() {
-		$m = new Monkey5;
-		$m->addClassMethod("getMe", function() {
+		Monkey::add_method("Monkey5", "getMe", function() {
 			return 1;
 		});
 
-		$n = new Monkey4;
-		$n->addClassMethod("getMe", function() {
+		Monkey::add_method("Monkey4", "getMe", function() {
 			return 2;
 		});
 
@@ -97,8 +93,7 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 	 * @test
 	 */
 	function addRegexClassMethodToClass() {
-		$m = new Monkey2;
-		$m->addClassMethod("/findBy(\w+)/", function($_matches) {
+		Monkey::add_method("Monkey2", "/findBy(\w+)/", function($_matches) {
 			return $_matches[0];
 		});
 
@@ -108,6 +103,13 @@ class MonkeyTest extends PHPUnit_Framework_TestCase {
 		self::assertEquals("Email", $i->findByEmail());
 	}
 
+	/**
+	 * @test
+	 * @expectedException MissingClassException
+	 */
+	function addClassMethodThrowsExceptionWhenClassIsMissing() {
+		Monkey::add_method("alksjdf", 'method', function() {} );
+	}
 	/**
 	 * @test
 	 * @group benchmark
@@ -216,7 +218,4 @@ class Monkey4 extends Monkey3 {
 }
 
 class Monkey5 extends Monkey4 {
-}
-
-class MissingMethodException extends Exception {
 }

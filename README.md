@@ -41,7 +41,7 @@ To add a regex pattern-matching method:
     
 To add a simple method to the class:
     
-    $object->addClassMethod("myClassMethod", function() {
+    Monkey::add_method('MyClass', "myMethod", function() {
       echo 'this is a class method';
     });
     
@@ -53,14 +53,15 @@ overhead of PHP's __call() function. Unless the dynamic method is extremely
 trivial (i.e., a getter), you are probably not going to notice the overhead. 
 Obviously, don't use dynamic methods in a tight loop.
 
-Here are the worst case scenario where the method is a simple getter:
+Here are the numbers for the worst case scenario where the method is a simple 
+getter:
 
 - class method: 1.1 microsecs
 - dynamic method: 4.0 microsecs
 - dynamic pattern-matching method: 7.3 microsecs
 
-Benchmarks were run on an Intel 2.4 Ghz Core 2 Duo MacBook Pro (2010). For details, 
-see the benchmarks in test/MonkeyTest.php
+Benchmarks were run on an Intel 2.4 Ghz Core 2 Duo MacBook Pro (2010). See the 
+benchmarks in test/MonkeyTest.php for details.
 
 
 Test

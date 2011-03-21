@@ -89,22 +89,29 @@ class Monkey {
 	 *
 	 * Note that this cannot be a static method call because the class will
 	 * always refer to this class
+	 * @param string $class the class name
 	 * @param string $nameOrRegex
 	 * @param function $callback
-	 * @return Monkey (useful for fluent syntax)
 	 */
-	function addClassMethod($nameOrRegex, $callback) {
-		$class = get_class($this);
+	static function add_method($class, $nameOrRegex, $callback) {
+		if (!class_exists($class)) {
+			throw new MissingClassException($class);
+		}
 
 		if (self::is_regex($nameOrRegex)) {
 			self::$_CLASS_REGEX_METHODS[$class][$nameOrRegex] = $callback;
 		} else {
 			self::$_CLASS_METHODS[$class][$nameOrRegex] = $callback;
 		}
-		return $this;
 	}
 
 	static private function is_regex($string) {
 		return preg_match('/\/.*\//', $string);
+	}
+}
+
+class MissingClassException extends Exception {
+	function __construct($class_name) {
+		parent::__construct("Class '$class_name' is missing");
 	}
 }
